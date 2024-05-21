@@ -23,7 +23,7 @@ use digest::{
 };
 
 #[cfg(feature = "oid")]
-use digest::const_oid::{AssociatedOid, ObjectIdentifier};
+use digest::const_oid::{AssociatedOid, ObjectIdentifier, ObjectIdentifierRef};
 #[cfg(feature = "zeroize")]
 use digest::zeroize::{Zeroize, ZeroizeOnDrop};
 
@@ -113,7 +113,8 @@ impl fmt::Debug for Sha1Core {
 #[cfg(feature = "oid")]
 #[cfg_attr(docsrs, doc(cfg(feature = "oid")))]
 impl AssociatedOid for Sha1Core {
-    const OID: ObjectIdentifier = ObjectIdentifier::new_unwrap("1.3.14.3.2.26");
+    const OID: &'static ObjectIdentifierRef =
+        ObjectIdentifier::new_unwrap("1.3.14.3.2.26").as_oid_ref();
 }
 
 impl Drop for Sha1Core {
