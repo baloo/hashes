@@ -26,8 +26,6 @@ hex-literal = "1"
 base16ct = { version = "0.2", features = ["alloc"] }
 
 [features]
-default = ["std"]
-std = ["digest/std"]
 zeroize = ["ascon/zeroize", "digest/zeroize"]
 
 [package.metadata.docs.rs]

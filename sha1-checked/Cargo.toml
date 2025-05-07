@@ -29,7 +29,7 @@ base16ct = { version = "0.2", features = ["alloc"] }
 
 [features]
 default = ["oid", "std"]
-std = ["digest/std", "sha1/std"]
+std = []
 oid = ["digest/oid", "sha1/oid"] # Enable OID support
 zeroize = ["dep:zeroize"]
 

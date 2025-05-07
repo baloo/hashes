@@ -15,8 +15,7 @@ extern crate std;
 use digest::const_oid::{AssociatedOid, ObjectIdentifier};
 use digest::{
     consts::{U32, U64},
-    core_api::{CoreWrapper, CtVariableCoreWrapper},
-    impl_oid_carrier,
+    core_api::CtVariableCoreWrapper,
 };
 
 mod consts;
@@ -25,10 +24,22 @@ mod core_api;
 pub use core_api::StreebogVarCore;
 pub use digest::{self, Digest};
 
-impl_oid_carrier!(Oid256, "1.2.643.7.1.1.2.2");
-impl_oid_carrier!(Oid512, "1.2.643.7.1.1.2.3");
+digest::newtype_fixed_hash!(
+    /// Streebog256 hasher.
+    pub struct Streebog256(CtVariableCoreWrapper<StreebogVarCore, U32>);
+);
 
-/// Streebog256 hasher.
-pub type Streebog256 = CoreWrapper<CtVariableCoreWrapper<StreebogVarCore, U32, Oid256>>;
-/// Streebog512 hasher.
-pub type Streebog512 = CoreWrapper<CtVariableCoreWrapper<StreebogVarCore, U64, Oid512>>;
+#[cfg(feature = "oid")]
+impl AssociatedOid for Streebog256 {
+    const OID: ObjectIdentifier = ObjectIdentifier::new_unwrap("1.2.643.7.1.1.2.2");
+}
+
+digest::newtype_fixed_hash!(
+    /// Streebog512 hasher.
+    pub struct Streebog512(CtVariableCoreWrapper<StreebogVarCore, U64>);
+);
+
+#[cfg(feature = "oid")]
+impl AssociatedOid for Streebog512 {
+    const OID: ObjectIdentifier = ObjectIdentifier::new_unwrap("1.2.643.7.1.1.2.3");
+}

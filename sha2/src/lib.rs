@@ -24,8 +24,7 @@ pub use digest::{self, Digest};
 use digest::const_oid::{AssociatedOid, ObjectIdentifier};
 use digest::{
     consts::{U28, U32, U48, U64},
-    core_api::{CoreWrapper, CtVariableCoreWrapper},
-    impl_oid_carrier,
+    core_api::CtVariableCoreWrapper,
 };
 
 #[rustfmt::skip]
@@ -39,22 +38,62 @@ pub use sha512::compress512;
 
 pub use core_api::{Sha256VarCore, Sha512VarCore};
 
-impl_oid_carrier!(OidSha256, "2.16.840.1.101.3.4.2.1");
-impl_oid_carrier!(OidSha384, "2.16.840.1.101.3.4.2.2");
-impl_oid_carrier!(OidSha512, "2.16.840.1.101.3.4.2.3");
-impl_oid_carrier!(OidSha224, "2.16.840.1.101.3.4.2.4");
-impl_oid_carrier!(OidSha512_224, "2.16.840.1.101.3.4.2.5");
-impl_oid_carrier!(OidSha512_256, "2.16.840.1.101.3.4.2.6");
+digest::newtype_fixed_hash!(
+    /// SHA-224 hasher.
+    pub struct Sha224(CtVariableCoreWrapper<Sha256VarCore, U28>);
+);
 
-/// SHA-224 hasher.
-pub type Sha224 = CoreWrapper<CtVariableCoreWrapper<Sha256VarCore, U28, OidSha224>>;
-/// SHA-256 hasher.
-pub type Sha256 = CoreWrapper<CtVariableCoreWrapper<Sha256VarCore, U32, OidSha256>>;
-/// SHA-512/224 hasher.
-pub type Sha512_224 = CoreWrapper<CtVariableCoreWrapper<Sha512VarCore, U28, OidSha512_224>>;
-/// SHA-512/256 hasher.
-pub type Sha512_256 = CoreWrapper<CtVariableCoreWrapper<Sha512VarCore, U32, OidSha512_256>>;
-/// SHA-384 hasher.
-pub type Sha384 = CoreWrapper<CtVariableCoreWrapper<Sha512VarCore, U48, OidSha384>>;
-/// SHA-512 hasher.
-pub type Sha512 = CoreWrapper<CtVariableCoreWrapper<Sha512VarCore, U64, OidSha512>>;
+#[cfg(feature = "oid")]
+impl AssociatedOid for Sha224 {
+    const OID: ObjectIdentifier = ObjectIdentifier::new_unwrap("2.16.840.1.101.3.4.2.4");
+}
+
+digest::newtype_fixed_hash!(
+    /// SHA-256 hasher.
+    pub struct Sha256(CtVariableCoreWrapper<Sha256VarCore, U32>);
+);
+
+#[cfg(feature = "oid")]
+impl AssociatedOid for Sha256 {
+    const OID: ObjectIdentifier = ObjectIdentifier::new_unwrap("2.16.840.1.101.3.4.2.1");
+}
+
+digest::newtype_fixed_hash!(
+    /// SHA-512/224 hasher.
+    pub struct Sha512_224(CtVariableCoreWrapper<Sha512VarCore, U28>);
+);
+
+#[cfg(feature = "oid")]
+impl AssociatedOid for Sha512_224 {
+    const OID: ObjectIdentifier = ObjectIdentifier::new_unwrap("2.16.840.1.101.3.4.2.5");
+}
+
+digest::newtype_fixed_hash!(
+    /// SHA-512/256 hasher.
+    pub struct Sha512_256(CtVariableCoreWrapper<Sha512VarCore, U32>);
+);
+
+#[cfg(feature = "oid")]
+impl AssociatedOid for Sha512_256 {
+    const OID: ObjectIdentifier = ObjectIdentifier::new_unwrap("2.16.840.1.101.3.4.2.6");
+}
+
+digest::newtype_fixed_hash!(
+    /// SHA-384 hasher.
+    pub struct Sha384(CtVariableCoreWrapper<Sha512VarCore, U48>);
+);
+
+#[cfg(feature = "oid")]
+impl AssociatedOid for Sha384 {
+    const OID: ObjectIdentifier = ObjectIdentifier::new_unwrap("2.16.840.1.101.3.4.2.2");
+}
+
+digest::newtype_fixed_hash!(
+    /// SHA-512 hasher.
+    pub struct Sha512(CtVariableCoreWrapper<Sha512VarCore, U64>);
+);
+
+#[cfg(feature = "oid")]
+impl AssociatedOid for Sha512 {
+    const OID: ObjectIdentifier = ObjectIdentifier::new_unwrap("2.16.840.1.101.3.4.2.2");
+}
